@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -45,6 +46,7 @@ public class Robot extends IterativeRobot {
     RobotDrive Drive1;
     
     boolean currentlyFiring, cylinder1, cylinder2, cylinder3, cylinder4;
+    double startTime;
     
     
     public void robotInit() {
@@ -87,6 +89,37 @@ public class Robot extends IterativeRobot {
 
        if(currentlyFiring) {
            //TODO timing logic here 
+           Drive1.arcadeDrive(0,0);
+           if(cylinder1) {
+               if (Timer.getFPGATimestamp() > startTime + 0.325) {
+                   Relay1.set(Relay.Value.kOff);
+                   cylinder1 = false;
+                   currentlyFiring = false;
+               }
+           }
+           if(cylinder2) {
+               if (Timer.getFPGATimestamp() > startTime + 0.325) {
+                   Relay2.set(Relay.Value.kOff);
+                   cylinder2 = false;
+                   currentlyFiring = false;
+               }
+           }
+           if(cylinder3) {
+               if (Timer.getFPGATimestamp() > startTime + 0.325) {
+                   Relay3.set(Relay.Value.kOff);
+                   cylinder3 = false;
+                   currentlyFiring = false;
+               }
+           }
+           if(cylinder4) {
+               if (Timer.getFPGATimestamp() > startTime + 0.325) {
+                   Relay4.set(Relay.Value.kOff);
+                   cylinder4 = false;
+                   currentlyFiring = false;
+               }
+           }
+               
+           
            
        } else {
            boolean safety = Joystick1.getRawButton(1);
@@ -100,29 +133,41 @@ public class Robot extends IterativeRobot {
            }
           
            if (safety && Joystick1.getRawButton(5)){
-               Relay1.set(Relay.Value.kForward);
-               
-           } else {
-               Relay1.set(Relay.Value.kOff);
-           }
-           
+               if(Timer.getFPGATimestamp() > startTime + 5) {
+                    Relay1.set(Relay.Value.kForward);
+                    startTime = Timer.getFPGATimestamp();
+                    cylinder1 = true;
+                    currentlyFiring = true;
+               }
+                    
+           } 
            if (safety && Joystick1.getRawButton(3)){
-               Relay2.set(Relay.Value.kForward); 
-           } else {
-               Relay2.set(Relay.Value.kOff);
-           }
-           
+               if(Timer.getFPGATimestamp() > startTime + 5) {
+                    Relay2.set(Relay.Value.kForward);
+                    startTime = Timer.getFPGATimestamp();
+                    cylinder2 = true;
+                    currentlyFiring = true;
+               }
+                    
+           } 
            if (safety && Joystick1.getRawButton(4)){
-               Relay3.set(Relay.Value.kForward); 
-           } else {
-               Relay3.set(Relay.Value.kOff);
-           }
-           
+               if(Timer.getFPGATimestamp() > startTime + 5) {
+                    Relay3.set(Relay.Value.kForward);
+                    startTime = Timer.getFPGATimestamp();
+                    cylinder3 = true;
+                    currentlyFiring = true;
+               }
+                    
+           } 
            if (safety && Joystick1.getRawButton(6)){
-               Relay4.set(Relay.Value.kForward); 
-           } else {
-               Relay4.set(Relay.Value.kOff);
-           }
+               if(Timer.getFPGATimestamp() > startTime + 5) {
+                    Relay4.set(Relay.Value.kForward);
+                    startTime = Timer.getFPGATimestamp();
+                    cylinder4 = true;
+                    currentlyFiring = true;
+               }
+                    
+           } 
           
            
        }
